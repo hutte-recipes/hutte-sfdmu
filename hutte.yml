@@ -1,0 +1,38 @@
+version: 1.0
+
+# Shell script to run when pushing the source code to the scratch orgs.
+# It's a great place to automate tasks like permission set assignments or data loading.
+push_script: |
+  sfdx --version
+  sfdx force:source:push -f --loglevel fatal 1>/dev/null
+
+# Shell script to run when pulling the source code from the scratch org.
+# Adding the "| hutte_track_changes" to the end of the pull command is important in order for
+# hutte to track which metadata was changed.
+pull_script: |
+  sfdx force:source:pull --loglevel fatal --json -f | hutte_track_changes
+
+custom_scripts:
+  # This scripts will be displayed on the scratch org's page
+  scratch_org:
+    'Import Data':
+      description: "Import data using SFDMU"
+      run: |
+        echo y | sfdx plugins install sfdmu
+        sfdx plugins
+        targetOrg="$(node -pe 'JSON.parse(fs.readFileSync(0, "utf8")).result[0].value' < <(sfdx config get target-org --json))"
+        sfdx sfdmu run -p data -s csvfile -u "${targetOrg}" --filelog 0 -n
+    'Export Data':
+      description: "Export data using SFDMU"
+      run: |
+        echo y | sfdx plugins install sfdmu
+        sfdx plugins
+        targetOrg="$(node -pe 'JSON.parse(fs.readFileSync(0, "utf8")).result[0].value' < <(sfdx config get target-org --json))"
+        sfdx sfdmu run -p data -s "${targetOrg}" -u csvfile --filelog 0 -n
+        git checkout "${BRANCH_NAME}" || git checkout -b "${BRANCH_NAME}"
+        git add data
+        git commit -am "add data" || true
+        git push origin ${BRANCH_NAME} 1>/dev/null
+        echo "${PULL_REQUEST_BODY}" > pr-body
+        source /_shared-functions.sh
+        _hutte_create_pr
