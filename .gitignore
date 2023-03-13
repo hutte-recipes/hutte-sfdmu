@@ -1,0 +1,8 @@
+/.sf/
+/.sfdx/
+node_modules/
+
+# SFDMU
+/data/source/
+/data/target/
+/data/logs/
