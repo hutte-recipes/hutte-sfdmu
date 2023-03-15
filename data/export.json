@@ -1,14 +1,14 @@
 {
   "objects": [
     {
-      "query": "SELECT readonly_false FROM Account",
+      "query": "SELECT readonly_false FROM Account ORDER BY Name ASC",
       "operation": "Upsert",
       "externalId": "Name"
     },
     {
-      "query": "SELECT readonly_false FROM Contact",
+      "query": "SELECT readonly_false FROM Contact ORDER BY Email,LastName,FirstName ASC",
       "operation": "Upsert",
-      "externalId": "FirstName;LastName;Email"
+      "externalId": "Email;LastName;FirstName"
     }
   ],
   "excludeIdsFromCSVFiles": true
