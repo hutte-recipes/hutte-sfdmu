@@ -19,13 +19,20 @@ custom_scripts:
       description: "Import data using SFDMU"
       run: |
         echo y | sfdx plugins install sfdmu
-        sfdx sfdmu --version
+        sfdx plugins
         targetOrg="$(node -pe 'JSON.parse(fs.readFileSync(0, "utf8")).result[0].value' < <(sfdx config get target-org --json))"
         sfdx sfdmu run -p data -s csvfile -u "${targetOrg}" --filelog 0 -n
     'Export Data':
       description: "Export data using SFDMU"
       run: |
         echo y | sfdx plugins install sfdmu
-        sfdx sfdmu --version
+        sfdx plugins
         targetOrg="$(node -pe 'JSON.parse(fs.readFileSync(0, "utf8")).result[0].value' < <(sfdx config get target-org --json))"
         sfdx sfdmu run -p data -s "${targetOrg}" -u csvfile --filelog 0 -n
+        git checkout "${BRANCH_NAME}" || git checkout -b "${BRANCH_NAME}"
+        git add data
+        git commit -am "add data" || true
+        git push origin ${BRANCH_NAME} 1>/dev/null
+        echo "${PULL_REQUEST_BODY}" > pr-body
+        source /_shared-functions.sh
+        _hutte_create_pr
