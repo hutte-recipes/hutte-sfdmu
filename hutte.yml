@@ -4,8 +4,7 @@ version: 1.0
 # It's a great place to automate tasks like permission set assignments or data loading.
 push_script: |
   sf --version
-  export SF_LOG_LEVEL=fatal
-  sf project deploy start --wait 60 --ignore-conflicts 1>/dev/null
+  sf project deploy start --wait 60 --ignore-conflicts
 
 custom_scripts:
   # This scripts will be displayed on the scratch org's page
