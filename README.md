@@ -6,7 +6,7 @@
 
 - a valid Sfdx Project
 - a `hutte.yml` file (e.g. the default one shown in the `CONFIGURATION` tab)
-- a source org authenticated with sfdx locally from which you want to export data
+- a source org authenticated with Salesforce CLI locally from which you want to export data
 
 ## Steps
 
@@ -17,8 +17,8 @@ The following assumes that we use the `data` directory to store `CSV` files.
 Install `SFDMU` on your machine.
 
 ```console
-echo y | sfdx plugins install sfdmu
-sfdx sfdmu --help
+echo y | sf plugins install sfdmu
+sf sfdmu --help
 ```
 
 ### Step 2
@@ -55,7 +55,7 @@ Add the following lines to the `.gitignore` file:
 Export the data from an org to the Git repository:
 
 ```console
-sfdx sfdmu run -s "<THE_TARGET_ORG_ALIAS>" -u csvfile --filelog 0 -n
+sf sfdmu run -s "<THE_TARGET_ORG_ALIAS>" -u csvfile --filelog 0 -n
 git add data
 git commit -m "add Salesforce data"
 git push
@@ -69,12 +69,11 @@ git push
 ```yaml
 custom_scripts:
   scratch_org:
-    "Import Data":
+    'Import Data':
       description: "Import data using SFDMU"
       run: |
-        echo y | sfdx plugins install sfdmu
-        sfdx plugins
-        sfdx sfdmu run -p data -s csvfile -u "${SALESFORCE_USERNAME}" --filelog 0 -n
+        echo y | sf plugins install sfdmu
+        sf sfdmu run -p data -s csvfile -u "${SALESFORCE_USERNAME}" --filelog 0 -n
 ```
 
 ### Step 4
