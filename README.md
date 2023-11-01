@@ -4,24 +4,23 @@
 
 ## Prerequisites
 
-- a valid Sfdx Project
+- SFDX installed on your computer
+- a valid sfdx project
 - a `hutte.yml` file (e.g. the default one shown in the `CONFIGURATION` tab)
 - a source org authenticated with Salesforce CLI locally from which you want to export data
 
-## Steps
+The following steps assume that we use the `data` directory to store `CSV` files.
 
-The following assumes that we use the `data` directory to store `CSV` files.
+## Step 1: Install SFDMU on your machine
 
-### Step 1
-
-Install `SFDMU` on your machine.
+Run the following code from your console (terminal):
 
 ```console
 echo y | sf plugins install sfdmu
 sf sfdmu --help
 ```
 
-### Step 2
+## Step 2: Prepare your data export
 
 Prepare the `data/export.json` file:
 
@@ -61,7 +60,7 @@ git commit -m "add Salesforce data"
 git push
 ```
 
-### Step 3
+## Step 3: Add custom button
 
 - Edit the `hutte.yml` file in your default branch
 - Add the following button in `custom_scripts > scratch_org`
@@ -69,14 +68,15 @@ git push
 ```yaml
 custom_scripts:
   scratch_org:
-    'Import Data':
+    "Import Data":
       description: "Import data using SFDMU"
       run: |
         echo y | sf plugins install sfdmu
         sf sfdmu run -p data -s csvfile -u "${SALESFORCE_USERNAME}" --filelog 0 -n
 ```
 
-### Step 4
+## Step 4: Validate
 
-- Create a Scratch Org or open an existing Scratch Org
+- Create a Scratch Org or open an existing Scratch Org in Hutte
 - Verify that the button is displayed
+- Execute the button and verify that data was imported
