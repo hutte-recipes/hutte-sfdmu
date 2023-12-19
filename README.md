@@ -4,7 +4,7 @@
 
 ## Prerequisites
 
-- SFDX installed on your computer
+- Salesforce CLI installed on your computer
 - a valid sfdx project
 - a `hutte.yml` file (e.g. the default one shown in the `CONFIGURATION` tab)
 - a source org authenticated with Salesforce CLI locally from which you want to export data
