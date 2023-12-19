@@ -14,3 +14,11 @@ custom_scripts:
       run: |
         echo y | sf plugins install sfdmu
         sf sfdmu run -p data -s csvfile -u "${SALESFORCE_USERNAME}" --filelog 0 -n
+    'Export Data':
+      description: "Export data using SFDMU"
+      run: |
+        echo y | sf plugins install sfdmu
+        sf sfdmu run -p data -s "${SALESFORCE_USERNAME}" -u csvfile --filelog 0 -n
+        git add data
+        git commit -m "add data"
+        git push

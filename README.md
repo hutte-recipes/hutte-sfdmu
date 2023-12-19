@@ -1,6 +1,6 @@
 # Hutte Recipe - SFDMU
 
-> This recipe uses [SFDX Data Move Utility (SFDMU)](https://github.com/forcedotcom/SFDX-Data-Move-Utility) to import data using a Custom Button in Hutte.
+> This recipe uses [SFDX Data Move Utility (SFDMU)](https://github.com/forcedotcom/SFDX-Data-Move-Utility) to import and export data using a Custom Button in Hutte.
 
 ## Prerequisites
 
@@ -73,6 +73,14 @@ custom_scripts:
       run: |
         echo y | sf plugins install sfdmu
         sf sfdmu run -p data -s csvfile -u "${SALESFORCE_USERNAME}" --filelog 0 -n
+    'Export Data':
+      description: "Export data using SFDMU"
+      run: |
+        echo y | sf plugins install sfdmu
+        sf sfdmu run -p data -s "${SALESFORCE_USERNAME}" -u csvfile --filelog 0 -n
+        git add data
+        git commit -m "add data"
+        git push
 ```
 
 ## Step 4: Validate
