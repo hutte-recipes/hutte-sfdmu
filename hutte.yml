@@ -21,4 +21,4 @@ custom_scripts:
         sf sfdmu run -p data -s "${SALESFORCE_USERNAME}" -u csvfile --filelog 0 -n
         git add data
         git commit -m "add data"
-        git push
+        git push origin "${HUTTE_GIT_SOURCE_BRANCH}"
