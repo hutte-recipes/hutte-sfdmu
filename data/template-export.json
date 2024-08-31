@@ -1,0 +1,9 @@
+{
+    "objects": [
+        {
+            "query": "<insertQuery>",
+            "operation": "Readonly",
+            "externalId": "Name"
+        }
+    ]
+}
