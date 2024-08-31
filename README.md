@@ -22,7 +22,7 @@ sf sfdmu --help
 
 ## Step 2: Prepare your data import
 
-Prepare the `data/<datafolder>/data-import.json` file per each of the data folders. For example, in this recipe we have three different data folders, namely `qa-data`, `package-configuration-data` and `development-baseline-data`. The `data-import.json` file will specify which data will be loaded when running the `Data Import` custom button, for the specific folder specified as parameter.
+Prepare the `data/<datafolder>/data-import.json` file per each of the data folders. For example, in this recipe we have three different data folders, namely `qa-data`, `package-configuration-data` and `development-baseline-data`. The `data-import.json` file will specify which data will be loaded when running the `Data Import` custom button, for the folder specified in the parameter.
 
 Example:
 
