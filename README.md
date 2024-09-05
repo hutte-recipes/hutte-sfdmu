@@ -2,6 +2,9 @@
 
 > This recipe uses [SFDX Data Move Utility (SFDMU)](https://github.com/forcedotcom/SFDX-Data-Move-Utility) to import and export data using a Custom Button (with input parameters) in Hutte.
 
+<img src="./docs/images/import-data-button.png" alt="drawing" width="700"/>
+<img src="./docs/images/commit-data-button.png" alt="drawing" width="700"/>
+
 ## Prerequisites
 
 - Salesforce CLI installed on your computer
@@ -22,7 +25,7 @@ sf sfdmu --help
 
 ## Step 2: Prepare your data import
 
-Prepare the `data/<datafolder>/data-import.json` file per each of the data folders. For example, in this recipe we have three different data folders, namely `qa-data`, `package-configuration-data` and `development-baseline-data`. The `data-import.json` file will specify which data will be loaded when running the `Data Import` custom button, for the folder specified in the parameter.
+Prepare the `data/<datafolder>/data-import.json` file per each of the data folders. For example, in this recipe we have three different data folders, namely `qa-data`, `package-configuration-data` and `development-baseline-data`. The `data-import.json` file will specify which data will be loaded when running the `Data Import` custom button, for the specific folder specified as parameter.
 
 Example:
 
