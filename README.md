@@ -25,7 +25,7 @@ sf sfdmu --help
 
 ## Step 2: Prepare your data import
 
-Prepare the `data/<datafolder>/data-import.json` file per each of the data folders. For example, in this recipe we have three different data folders, namely `qa-data`, `package-configuration-data` and `development-baseline-data`. The `data-import.json` file will specify which data will be loaded when running the `Data Import` custom button, for the specific folder specified as parameter.
+Prepare the `data/<datafolder>/data-import.json` file per each of the data folders. For example, in this recipe we have three different data folders, namely `qa-data`, `package-configuration-data` and `development-baseline-data`. The `data-import.json` file will specify which data will be loaded when running the `Import Data` custom button, for the specific folder specified as parameter.
 
 Example:
 
@@ -66,25 +66,15 @@ custom_scripts:
     "Commit Data":
       description: "Commit data into Git using SFDMU"
       run: |
-        set -e
-        cp data/template-export.json "$HUTTE_INPUT_destinationfolder/export.json"
-        # If it contains "LIMIT", use the query as is, otherwise add LIMIT 10 to avoid accidental commit of several data records
-        if [[ "$HUTTE_INPUT_soql" =~ [Ll][Ii][Mm][Ii][Tt] ]]; then
-            soql="$HUTTE_INPUT_soql"
-        else
-            soql="$HUTTE_INPUT_soql LIMIT 10"
-        fi
-        escaped_soql=$(printf '%s\n' "$soql" | sed 's/[&/\]/\\&/g')
-        sed -i "s|<insertQuery>|$escaped_soql|g" "$HUTTE_INPUT_destinationfolder/export.json"
-        cat "$HUTTE_INPUT_destinationfolder/export.json"
-        cd $HUTTE_INPUT_destinationfolder
+        set -euo pipefail # fail fast
+        envsubst < data/template-export.json | tee /dev/stderr > "${HUTTE_INPUT_destinationfolder}/export.json"
         echo y | sf plugins install sfdmu
-        sf sfdmu run --sourceusername "${SALESFORCE_USERNAME}" --targetusername csvfile --filelog 0 -n
-        git add . && git commit -m "$HUTTE_INPUT_commitmessage" && git push origin "${HUTTE_GIT_SOURCE_BRANCH}"
+        sf sfdmu run --path "${HUTTE_INPUT_destinationfolder}" --sourceusername "${SALESFORCE_USERNAME}" --targetusername csvfile --filelog 0 -n
+        git add . && git commit -m "${HUTTE_INPUT_commitmessage}" && git push origin "${HUTTE_GIT_SOURCE_BRANCH}"
       inputs:
         soql:
           label: "Data SOQL"
-          description: "Specify the SOQL that returns the data to commit, including the more relevant fields and filters. Note: If you don't include a LIMIT, default 'LIMIT 10' will be used as security measure."
+          description: "Specify the SOQL that returns the data to commit, including the more relevant fields and filters."
           type: string
           default: "SELECT Id FROM Account LIMIT 10"
           required: true
@@ -105,9 +95,10 @@ custom_scripts:
     "Import Data":
       description: "Import data using SFDMU"
       run: |
-        cp $HUTTE_INPUT_sourcefolder/data-import.json $HUTTE_INPUT_sourcefolder/export.json
+        set -euo pipefail # fail fast
+        cp "${HUTTE_INPUT_sourcefolder}/data-import.json" "${HUTTE_INPUT_sourcefolder}/export.json"
         echo y | sf plugins install sfdmu
-        sf sfdmu run -p $HUTTE_INPUT_sourcefolder -s csvfile -u "${SALESFORCE_USERNAME}" --filelog 0 -n
+        sf sfdmu run --path "${HUTTE_INPUT_sourcefolder}" -s csvfile -u "${SALESFORCE_USERNAME}" --filelog 0 -n
       inputs:
         sourcefolder:
           label: "Source Folder"

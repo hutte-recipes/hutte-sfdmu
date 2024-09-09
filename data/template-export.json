@@ -1,7 +1,7 @@
 {
     "objects": [
         {
-            "query": "<insertQuery>",
+            "query": "${HUTTE_INPUT_soql}",
             "operation": "Readonly",
             "externalId": "Name"
         }
