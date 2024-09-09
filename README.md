@@ -67,7 +67,8 @@ custom_scripts:
       description: "Commit data into Git using SFDMU"
       run: |
         set -euo pipefail # fail fast
-        envsubst < data/template-export.json | tee /dev/stderr > "${HUTTE_INPUT_destinationfolder}/export.json"
+        envsubst < data/template-export.json > "${HUTTE_INPUT_destinationfolder}/export.json"
+        cat "${HUTTE_INPUT_destinationfolder}/export.json"
         echo y | sf plugins install sfdmu
         sf sfdmu run --path "${HUTTE_INPUT_destinationfolder}" --sourceusername "${SALESFORCE_USERNAME}" --targetusername csvfile --filelog 0 -n
         git add . && git commit -m "${HUTTE_INPUT_commitmessage}" && git push origin "${HUTTE_GIT_SOURCE_BRANCH}"
