@@ -1,0 +1,8 @@
+# Internal .gitignore to avoid tracking SFDMU execution files that are not required for the Data package.
+
+*.log
+*target
+MissingParentRecordsReport.csv
+
+# We don't commit the final export.json given that this is created on runtime by the Hutte custom button logic
+export.json

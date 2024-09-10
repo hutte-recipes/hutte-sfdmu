@@ -1,0 +1,9 @@
+{
+    "objects": [
+        {
+            "query": "${HUTTE_INPUT_soql}",
+            "operation": "Readonly",
+            "externalId": "Name"
+        }
+    ]
+}
